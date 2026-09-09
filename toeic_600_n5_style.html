@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Web học từ vựng Toeic của Như thương yêu</title>
+<style>
+:root{
+  --bg:#f5f7fb;--panel:#fff;--text:#172033;--muted:#667085;--line:#e4e7ec;
+  --primary:#3157d5;--soft:#eef2ff;--good:#137a4b;--warn:#b54708;
+  --danger:#c4320a;--shadow:0 18px 55px rgba(16,24,40,.10)
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select{font:inherit}
+.app{max-width:1180px;margin:auto;padding:24px}
+.header{display:flex;gap:18px;justify-content:space-between;align-items:flex-start;margin-bottom:18px}
+h1{font-size:clamp(24px,4vw,38px);margin:0 0 7px}
+.sub{color:var(--muted);line-height:1.55}
+.badge{display:inline-flex;padding:6px 10px;border-radius:999px;background:var(--soft);color:var(--primary);font-weight:700;font-size:13px}
+.layout{display:grid;grid-template-columns:310px 1fr;gap:18px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
+.sidebar{padding:16px;position:sticky;top:16px;height:max-content}
+.sidebar h3{margin:0 0 12px}
+.field{margin:12px 0}
+.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+select,input[type=text]{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:11px;background:white;outline:none}
+select:focus,input:focus{border-color:var(--primary)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:#fff;padding:10px 12px;border-radius:11px;cursor:pointer;font-weight:650}
+.btn:hover{background:#f8fafc}
+.btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.btn.good{color:var(--good)}
+.btn.warn{color:var(--warn)}
+.btn.danger{color:var(--danger)}
+.btn.active-save{background:#fff8db;border-color:#f3d777}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:14px}
+.stat{background:#f8fafc;border-radius:12px;padding:10px;text-align:center}
+.stat b{display:block;font-size:18px}
+.stat span{font-size:11px;color:var(--muted)}
+.main{padding:18px}
+.topbar{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px}
+.top-actions{display:flex;gap:8px;flex-wrap:wrap}
+.progress{height:7px;background:#edf0f5;border-radius:999px;overflow:hidden}
+.progress>div{height:100%;background:var(--primary);width:0;transition:width .25s}
+.cardwrap{perspective:1400px;min-height:430px;margin-top:16px}
+.card{height:430px;position:relative;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.2,.75,.25,1);cursor:pointer}
+.card.flipped{transform:rotateY(180deg)}
+.face{
+  position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border:1px solid var(--line);border-radius:24px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:34px;text-align:center;background:linear-gradient(145deg,#fff,#fbfcff);
+  overflow:hidden
+}
+.back{transform:rotateY(180deg)}
+.topic-badge{position:absolute;top:20px;left:20px;max-width:65%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.status{position:absolute;top:20px;right:20px;font-size:13px;color:var(--muted)}
+.word{font-size:clamp(42px,7vw,72px);font-weight:800;line-height:1.15;word-break:break-word}
+.phonetic{font-size:19px;color:var(--muted);margin:12px 0}
+.type{font-weight:700;color:var(--primary)}
+.meaning{font-size:clamp(24px,4vw,38px);font-weight:750;line-height:1.3;max-width:90%}
+.explain{font-size:15px;color:var(--muted);line-height:1.5;margin-top:10px;max-width:90%}
+.example{margin-top:15px;line-height:1.5;max-width:92%}
+.example-vi{font-size:14px;color:var(--muted);margin-top:5px}
+.hint{position:absolute;bottom:22px;color:var(--muted);font-size:13px}
+.controls{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:14px}
+.controls .btn{min-width:110px}
+.list{margin-top:22px;border-top:1px solid var(--line);padding-top:18px}
+.listhead{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.table{margin-top:10px;max-height:330px;overflow:auto;border:1px solid var(--line);border-radius:12px}
+.tr{display:grid;grid-template-columns:46px 1.2fr .7fr 1.5fr 1.2fr 76px;gap:8px;padding:9px 11px;border-bottom:1px solid var(--line);align-items:center;font-size:13px;cursor:pointer}
+.tr:hover{background:#fafbff}
+.tr:last-child{border-bottom:none}
+.tr.head{position:sticky;top:0;background:#f8fafc;font-weight:750;z-index:1;cursor:default}
+.known{color:var(--good);font-weight:700}
+.learning{color:var(--warn);font-weight:700}
+.star{font-size:17px;color:#b58100}
+kbd{background:#f2f4f7;border:1px solid #d0d5dd;border-bottom-width:2px;border-radius:5px;padding:1px 5px;font-size:11px}
+.footer{margin:16px 0 4px;color:var(--muted);font-size:12px;line-height:1.5}
+.data-actions{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+#datasetStatus{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.45}
+@media(max-width:820px){
+  .layout{grid-template-columns:1fr}.sidebar{position:static}.header{flex-direction:column}
+  .card,.cardwrap{height:390px;min-height:390px}
+  .tr{grid-template-columns:40px 1.1fr 1fr 70px}
+  .tr>*:nth-child(3),.tr>*:nth-child(5){display:none}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div>
+      <span class="badge">TOEIC • 600 Words by Topic</span>
+      <h1>Như thương yêu</h1>
+    </div>
+  </div>
+
+  <div class="layout">
+    <aside class="panel sidebar">
+      <h3>Bộ lọc</h3>
+
+      <div class="field">
+        <label>Chủ đề</label>
+        <select id="topic"></select>
+      </div>
+
+      <div class="field">
+        <label>Loại từ</label>
+        <select id="type"></select>
+      </div>
+
+      <div class="field">
+        <label>Trạng thái</label>
+        <select id="statusFilter">
+          <option value="all">Tất cả</option>
+          <option value="learning">Chưa thuộc</option>
+          <option value="known">Đã thuộc</option>
+          <option value="saved">⭐ Đã lưu</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Tìm kiếm</label>
+        <input id="search" type="text" placeholder="Từ / nghĩa / ví dụ">
+      </div>
+
+      <div class="row">
+        <button class="btn" id="shuffle">🔀 Xáo trộn</button>
+        <button class="btn" id="clearFilter">↺ Xóa lọc</button>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><b id="filteredCount">0</b><span>Đang lọc</span></div>
+        <div class="stat"><b id="knownCount">0</b><span>Đã thuộc</span></div>
+        <div class="stat"><b id="savedCount">0</b><span>Đã lưu</span></div>
+        <div class="stat"><b id="allCount">0</b><span>Tổng từ</span></div>
+      </div>
+
+      <div class="data-actions">
+        <div class="row">
+          <button class="btn primary" id="sync">⬇ Đồng bộ dữ liệu</button>
+          <button class="btn" id="export">Xuất JSON</button>
+        </div>
+        <div id="datasetStatus">Đang kiểm tra dữ liệu...</div>
+      </div>
+
+      <div class="footer">
+        Phím tắt: <kbd>Space</kbd> lật • <kbd>←</kbd>/<kbd>→</kbd> chuyển •
+        <kbd>K</kbd> đã thuộc • <kbd>L</kbd> chưa thuộc • <kbd>S</kbd> phát âm • <kbd>F</kbd> lưu từ.
+      </div>
+    </aside>
+
+    <main class="panel main">
+      <div class="topbar">
+        <div>
+          <b id="counter">0 / 0</b>
+          <span id="currentTopic" class="badge"></span>
+        </div>
+        <div class="top-actions">
+          <button class="btn" id="saveWord">☆ Lưu từ</button>
+          <button class="btn" id="speak">🔊 Phát âm</button>
+        </div>
+      </div>
+
+      <div class="progress"><div id="bar"></div></div>
+
+      <div class="cardwrap">
+        <div class="card" id="card">
+          <section class="face front">
+            <span class="badge topic-badge" id="frontTopic"></span>
+            <span class="status" id="frontStatus"></span>
+            <div class="word" id="word"></div>
+            <div class="phonetic" id="phonetic"></div>
+            <div class="type" id="wordType"></div>
+            <div class="hint">Nhấn vào thẻ hoặc <kbd>Space</kbd> để xem đáp án</div>
+          </section>
+
+          <section class="face back">
+            <span class="badge topic-badge" id="backTopic"></span>
+            <span class="status" id="backStatus"></span>
+            <div class="meaning" id="meaning"></div>
+            <div class="explain" id="explain"></div>
+            <div class="example" id="example"></div>
+            <div class="example-vi" id="exampleVi"></div>
+            <div class="hint">Nhấn lại để quay về mặt trước</div>
+          </section>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="btn" id="prev">← Trước</button>
+        <button class="btn warn" id="learning">📌 Chưa thuộc</button>
+        <button class="btn good" id="markKnown">✓ Đã thuộc</button>
+        <button class="btn" id="next">Tiếp →</button>
+      </div>
+
+      <div class="list">
+        <div class="listhead">
+          <b>Danh sách từ trong bộ lọc</b>
+          <span class="sub">Bấm một dòng để mở thẻ</span>
+        </div>
+        <div class="table" id="table"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+const DATASET_URL="https://raw.githubusercontent.com/tranngocminhhieu/toeic-600-words-dataset/5ef9ff6d34e2dbdaba73a8433a1944826f66cc61/data/toeic_600_words.csv";
+const DATASET_VERSION="github-5ef9ff6d34e2dbdaba73a8433a1944826f66cc61";
+const KEY_WORDS="toeic600_words_v3";
+const KEY_VERSION="toeic600_version_v3";
+const KEY_PROGRESS="toeic600_progress_v3";
+const KEY_SAVED="toeic600_saved_v3";
+
+const FALLBACK=[
+ {word:"negotiate",type:"v.",meaning:"Thương lượng, đàm phán",phonetic:"/ni'gouʃieit/",explain:"to try to reach an agreement by formal discussion",example:"You must know what you want when you negotiate a salary.",exampleVietnamese:"Bạn phải biết mình muốn gì khi thương lượng lương.",topic:"Salaries & Benefits",audioUrl:""},
+ {word:"deadline",type:"n.",meaning:"Hạn chót",phonetic:"/ˈdedlaɪn/",explain:"a time or date by which something must be finished",example:"The deadline is Friday.",exampleVietnamese:"Hạn chót là thứ Sáu.",topic:"Office Procedures",audioUrl:""}
+];
+
+let words=loadJSON(KEY_WORDS,FALLBACK);
+let progress=loadJSON(KEY_PROGRESS,{});
+let saved=new Set(loadJSON(KEY_SAVED,[]));
+let filtered=[];
+let index=0;
+let flipped=false;
+let shuffled=false;
+
+const $=id=>document.getElementById(id);
+function loadJSON(key,fallback){try{const v=localStorage.getItem(key);return v?JSON.parse(v):fallback}catch{return fallback}}
+function saveProgress(){localStorage.setItem(KEY_PROGRESS,JSON.stringify(progress))}
+function saveSaved(){localStorage.setItem(KEY_SAVED,JSON.stringify([...saved]))}
+function keyOf(w){return (w.word+"|"+w.topic).toLowerCase()}
+function esc(v=""){return String(v??"").replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function normalize(s=""){return String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")}
+function current(){return filtered[index]}
+
+function csvParse(text){
+  const rows=[]; let row=[],field="",q=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i],n=text[i+1];
+    if(q){
+      if(c=='"'&&n=='"'){field+='"';i++}
+      else if(c=='"')q=false;
+      else field+=c;
+    }else{
+      if(c=='"')q=true;
+      else if(c==','){row.push(field);field=""}
+      else if(c=='\n'){row.push(field);rows.push(row);row=[];field=""}
+      else if(c!='\r')field+=c;
+    }
+  }
+  if(field||row.length){row.push(field);rows.push(row)}
+  return rows;
+}
+
+function mapCsv(text){
+  const rows=csvParse(text.replace(/^\uFEFF/,""));
+  const h=rows.shift().map(x=>x.trim());
+  const pos={}; h.forEach((x,i)=>pos[x]=i);
+  const get=(r,n)=>String(r[pos[n]]??"").trim();
+  return rows.filter(r=>get(r,"english")).map(r=>({
+    word:get(r,"english"),
+    type:get(r,"type"),
+    meaning:get(r,"vietnamese"),
+    phonetic:get(r,"pronounce"),
+    explain:get(r,"explain"),
+    example:get(r,"example"),
+    exampleVietnamese:get(r,"example_vietnamese"),
+    imageUrl:get(r,"image_url"),
+    audioUrl:get(r,"audio_url"),
+    topic:get(r,"topic"),
+    topicUrl:get(r,"topic_url")
+  }));
+}
+
+async function syncDataset(manual=false){
+  $("datasetStatus").textContent="Đang tải dữ liệu TOEIC...";
+  try{
+    const res=await fetch(DATASET_URL,{cache:"no-store"});
+    if(!res.ok)throw new Error("HTTP "+res.status);
+    const data=mapCsv(await res.text());
+    if(data.length<500)throw new Error("Dataset không đầy đủ");
+    words=data;
+    localStorage.setItem(KEY_WORDS,JSON.stringify(words));
+    localStorage.setItem(KEY_VERSION,DATASET_VERSION);
+    $("datasetStatus").textContent=`✓ Đã lưu ${words.length} từ vào LocalStorage`;
+    populateFilters(); applyFilters();
+    if(manual) alert(`Đồng bộ thành công ${words.length} từ.`);
+  }catch(e){
+    $("datasetStatus").textContent=`Không tải được GitHub. Đang dùng ${words.length} từ đã lưu local.`;
+    if(manual)alert("Không thể đồng bộ: "+e.message);
+  }
+}
+
+function populateFilters(){
+  const oldTopic=$("topic").value, oldType=$("type").value;
+  const topics=[...new Set(words.map(x=>x.topic).filter(Boolean))].sort();
+  const types=[...new Set(words.map(x=>x.type).filter(Boolean))].sort();
+  $("topic").innerHTML='<option value="all">Tất cả chủ đề</option>'+topics.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join("");
+  $("type").innerHTML='<option value="all">Tất cả loại từ</option>'+types.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join("");
+  if(topics.includes(oldTopic))$("topic").value=oldTopic;
+  if(types.includes(oldType))$("type").value=oldType;
+}
+
+function applyFilters(keepWordKey=null){
+  const topic=$("topic").value;
+  const type=$("type").value;
+  const status=$("statusFilter").value;
+  const q=normalize($("search").value.trim());
+
+  filtered=words.filter(w=>{
+    const k=keyOf(w),st=progress[k]||"learning";
+    if(topic!=="all"&&w.topic!==topic)return false;
+    if(type!=="all"&&w.type!==type)return false;
+    if(status==="known"&&st!=="known")return false;
+    if(status==="learning"&&st==="known")return false;
+    if(status==="saved"&&!saved.has(k))return false;
+    if(q){
+      const hay=normalize([w.word,w.meaning,w.phonetic,w.example,w.exampleVietnamese,w.explain].join(" "));
+      if(!hay.includes(q))return false;
+    }
+    return true;
+  });
+
+  if(shuffled) filtered=shuffleArray([...filtered]);
+  index=0;
+  if(keepWordKey){
+    const i=filtered.findIndex(w=>keyOf(w)===keepWordKey);
+    if(i>=0)index=i;
+  }
+  flipped=false;
+  render();
+}
+
+function shuffleArray(a){
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}
+  return a;
+}
+
+function statusText(w){
+  if(!w)return "";
+  return progress[keyOf(w)]==="known"?"✓ Đã thuộc":"📌 Chưa thuộc";
+}
+
+function render(){
+  const w=current();
+  $("allCount").textContent=words.length;
+  $("filteredCount").textContent=filtered.length;
+  $("knownCount").textContent=Object.values(progress).filter(x=>x==="known").length;
+  $("savedCount").textContent=saved.size;
+  $("counter").textContent=filtered.length?`${index+1} / ${filtered.length}`:"0 / 0";
+  $("bar").style.width=filtered.length?`${((index+1)/filtered.length)*100}%`:"0%";
+  $("card").classList.toggle("flipped",flipped);
+
+  if(!w){
+    $("currentTopic").textContent="";
+    $("frontTopic").textContent="";
+    $("backTopic").textContent="";
+    $("frontStatus").textContent="";
+    $("backStatus").textContent="";
+    $("word").textContent="Không có từ";
+    $("phonetic").textContent="";
+    $("wordType").textContent="";
+    $("meaning").textContent="Hãy thay đổi bộ lọc.";
+    $("explain").textContent="";
+    $("example").textContent="";
+    $("exampleVi").textContent="";
+    $("saveWord").textContent="☆ Lưu từ";
+    $("saveWord").classList.remove("active-save");
+    renderTable();
+    return;
+  }
+
+  const k=keyOf(w), st=statusText(w);
+  $("currentTopic").textContent=w.topic;
+  $("frontTopic").textContent=w.topic;
+  $("backTopic").textContent=w.topic;
+  $("frontStatus").textContent=st;
+  $("backStatus").textContent=st;
+  $("word").textContent=w.word;
+  $("phonetic").textContent=w.phonetic||"";
+  $("wordType").textContent=w.type||"";
+  $("meaning").textContent=w.meaning||"";
+  $("explain").textContent=w.explain||"";
+  $("example").textContent=w.example||"";
+  $("exampleVi").textContent=w.exampleVietnamese||"";
+  $("saveWord").textContent=saved.has(k)?"★ Đã lưu":"☆ Lưu từ";
+  $("saveWord").classList.toggle("active-save",saved.has(k));
+  renderTable();
+}
+
+function renderTable(){
+  const head=`<div class="tr head"><div>#</div><div>Từ</div><div>Loại</div><div>Nghĩa</div><div>Chủ đề</div><div>Trạng thái</div></div>`;
+  const body=filtered.map((w,i)=>{
+    const k=keyOf(w),known=progress[k]==="known";
+    return `<div class="tr" data-i="${i}">
+      <div>${i+1}</div>
+      <div><b>${esc(w.word)}</b>${saved.has(k)?' <span class="star">★</span>':''}</div>
+      <div>${esc(w.type)}</div>
+      <div>${esc(w.meaning)}</div>
+      <div>${esc(w.topic)}</div>
+      <div class="${known?'known':'learning'}">${known?'✓ Thuộc':'📌 Học'}</div>
+    </div>`;
+  }).join("");
+  $("table").innerHTML=head+body;
+  $("table").querySelectorAll(".tr[data-i]").forEach(r=>{
+    r.onclick=()=>{index=Number(r.dataset.i);flipped=false;render();scrollToCard()}
+  });
+}
+
+function scrollToCard(){document.querySelector(".main").scrollIntoView({behavior:"smooth",block:"start"})}
+function next(){if(!filtered.length)return;index=(index+1)%filtered.length;flipped=false;render()}
+function prev(){if(!filtered.length)return;index=(index-1+filtered.length)%filtered.length;flipped=false;render()}
+function mark(st){
+  const w=current(); if(!w)return;
+  const k=keyOf(w);
+  progress[k]=st;
+  saveProgress();
+  render();
+}
+function toggleSave(){
+  const w=current(); if(!w)return;
+  const k=keyOf(w);
+  if(saved.has(k))saved.delete(k);else saved.add(k);
+  saveSaved();render();
+}
+function speak(){
+  const w=current(); if(!w)return;
+  if(w.audioUrl){
+    const a=new Audio(w.audioUrl);
+    a.play().catch(()=>browserSpeak(w.word));
+  }else browserSpeak(w.word);
+}
+function browserSpeak(text){
+  if(!("speechSynthesis" in window))return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);u.lang="en-US";speechSynthesis.speak(u);
+}
+
+$("card").onclick=()=>{if(!filtered.length)return;flipped=!flipped;render()};
+$("prev").onclick=prev;
+$("next").onclick=next;
+$("markKnown").onclick=()=>mark("known");
+$("learning").onclick=()=>mark("learning");
+$("saveWord").onclick=toggleSave;
+$("speak").onclick=speak;
+
+["topic","type","statusFilter"].forEach(id=>$(id).onchange=()=>{shuffled=false;applyFilters()});
+$("search").oninput=()=>{shuffled=false;applyFilters()};
+$("shuffle").onclick=()=>{shuffled=true;filtered=shuffleArray([...filtered]);index=0;flipped=false;render()};
+$("clearFilter").onclick=()=>{
+  $("topic").value="all";$("type").value="all";$("statusFilter").value="all";$("search").value="";
+  shuffled=false;applyFilters();
+};
+$("sync").onclick=()=>syncDataset(true);
+$("export").onclick=()=>{
+  const blob=new Blob([JSON.stringify(words,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=url;a.download="toeic_600_words.json";a.click();URL.revokeObjectURL(url);
+};
+
+document.addEventListener("keydown",e=>{
+  if(["INPUT","SELECT","TEXTAREA"].includes(document.activeElement.tagName))return;
+  if(e.code==="Space"){e.preventDefault();flipped=!flipped;render()}
+  else if(e.key==="ArrowRight")next();
+  else if(e.key==="ArrowLeft")prev();
+  else if(e.key.toLowerCase()==="k")mark("known");
+  else if(e.key.toLowerCase()==="l")mark("learning");
+  else if(e.key.toLowerCase()==="s")speak();
+  else if(e.key.toLowerCase()==="f")toggleSave();
+});
+
+populateFilters();
+applyFilters();
+
+const localVersion=localStorage.getItem(KEY_VERSION);
+if(localVersion===DATASET_VERSION && words.length>500){
+  $("datasetStatus").textContent=`✓ ${words.length} từ đang được đọc từ LocalStorage`;
+}else{
+  syncDataset(false);
+}
+</script>
+</body>
+</html>
